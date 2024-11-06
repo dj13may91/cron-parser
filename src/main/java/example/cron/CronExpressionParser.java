@@ -17,7 +17,7 @@ public class CronExpressionParser {
     }
 
     public CronExpressionParser(String expression) {
-        if (expression.split(" ").length != 6) {
+        if (expression.trim().split(" ").length < 6) {
             System.err.println("Invalid expression");
             return;
         }
@@ -27,7 +27,11 @@ public class CronExpressionParser {
         convertExpressionToField(FieldType.DAY_OF_MONTH, input[2]);
         convertExpressionToField(FieldType.DAY_OF_WEEK, input[3]);
         convertExpressionToField(FieldType.MONTH, input[4]);
-        commandExecutor = new CommandExecutor(input[5]); // default last part is command
+
+        StringBuilder command = new StringBuilder();
+        for (int i = 5; i < input.length; i++)// default last part is command
+            command.append(input[i]).append(" ");
+        commandExecutor = new CommandExecutor(command.toString());
     }
 
     private void convertExpressionToField(FieldType fieldType, String expression) {
